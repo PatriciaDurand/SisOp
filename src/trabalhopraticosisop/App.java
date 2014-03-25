@@ -37,6 +37,7 @@ public class App {
 
         l.addNaTabelaFinal(listaArquivoASM);
         l.corrigindoLabels();
+        l.adicionaMemoriaBinariaComandos();
         ArrayList<Memoria> listaFinal = l.getListaFinal();
         for (int i = 0; i < listaFinal.size(); i++) {
             System.out.println(listaFinal.get(i));
