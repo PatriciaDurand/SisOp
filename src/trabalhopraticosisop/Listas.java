@@ -13,6 +13,7 @@ public class Listas {
     private Map<String, String> listaDeVariaveis;
     private ArrayList<Memoria> listaFinal;
     private ArrayList<String> listaASM;
+    private String numeroConvertidoEmMemoriaBinaria;
 
     public Listas() {
         listaDeComandos = new HashMap<>();
@@ -20,6 +21,7 @@ public class Listas {
         listaDeVariaveis = new HashMap<>();
         listaFinal = new ArrayList<>();
         listaASM = new ArrayList<>();
+        numeroConvertidoEmMemoriaBinaria = "";
     }
 
     public Map<String, String> getListaDeComandos() {
@@ -87,7 +89,6 @@ public class Listas {
                 String[] linha = listaCompleta.get(i).split(" ");
                 for (int j = 0; j < linha.length; j++) {
                     if (!(linha[j].contains(":"))) {
-
                         listaFinal.add(new Memoria(linha[j], ""));
                     }
                 }
@@ -108,13 +109,20 @@ public class Listas {
                 }
                 memoriaBinaria = pegaMemoriaBinaria(listaFinal.get(i).getInstrucao()) + ultimoDigito;
                 listaFinal.get(i).setMemoria_binaria(memoriaBinaria);
-                continue;
             } else if (eVariavel(listaFinal.get(i).getInstrucao()) == true) {
                 for (int j = listaFinal.size() - 1; j < listaFinal.size(); j--) {
-                    if (listaFinal.get(i).getInstrucao().equals(listaFinal.get(j).getInstrucao())) {
-                        memoriaBinaria = String.format("%08d", Integer.parseInt(listaFinal.get(j + 1).getEndereco()));
-                        listaFinal.get(i).setMemoria_binaria(memoriaBinaria);
-                        break;
+                    if (i != j) {
+                        if (i < j) {
+                            if (listaFinal.get(i).getInstrucao().equals(listaFinal.get(j).getInstrucao())) {
+                                memoriaBinaria = String.format("%08d", Integer.parseInt(listaFinal.get(j + 1).getEndereco()));
+                                listaFinal.get(i).setMemoria_binaria(memoriaBinaria);
+                                break;
+                            }
+                        }
+                    } else {
+                        listaFinal.get(i).setMemoria_binaria("11110001");
+                        numeroConvertidoEmMemoriaBinaria = converteStringParaBinarioDeOitoDigitos(listaFinal.get(i + 1).getInstrucao());
+                        listaFinal.get(i + 1).setMemoria_binaria(numeroConvertidoEmMemoriaBinaria);
                     }
                 }
 
@@ -168,7 +176,7 @@ public class Listas {
 
         }
         if (variavel.matches("^[0-9]*$")) {
-            memoriaBinaria = String.format("%08d", Integer.parseInt(listaFinal.get(index).getInstrucao()));
+            memoriaBinaria = converteStringParaBinarioDeOitoDigitos(listaFinal.get(index).getInstrucao());
             listaFinal.get(index).setMemoria_binaria(memoriaBinaria);
         }
     }
@@ -198,6 +206,13 @@ public class Listas {
                 listaFinal.get(i).setMemoria_binaria(memoriaBinaria);
             }
         }
+    }
+
+    public String converteStringParaBinarioDeOitoDigitos(String n) {
+        int numero = Integer.parseInt(n);
+        String numeroConvertidoEmBinario = Integer.toBinaryString(numero);
+        int numBinarioConvertidoEmInt = Integer.parseInt(numeroConvertidoEmBinario);
+        return String.format("%08d", numBinarioConvertidoEmInt);
     }
 
     public ArrayList<Memoria> getListaFinal() {
