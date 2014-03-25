@@ -35,9 +35,9 @@ public class App {
 //            System.out.println(listaVariaveis.get(i));
 //        }
 
-        l.addNaTabelaFinal(listaArquivoASM);
+        l.addInstrucoesNaTabelaFinal(listaArquivoASM);
         l.corrigindoLabels();
-        l.adicionaMemoriaBinariaComandos();
+        l.adicionaMemoriaBinaria();
         ArrayList<Memoria> listaFinal = l.getListaFinal();
         for (int i = 0; i < listaFinal.size(); i++) {
             System.out.println(listaFinal.get(i));

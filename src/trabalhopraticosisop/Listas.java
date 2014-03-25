@@ -81,12 +81,13 @@ public class Listas {
         }
     }
 
-    public void addNaTabelaFinal(ArrayList<String> listaCompleta) {
+    public void addInstrucoesNaTabelaFinal(ArrayList<String> listaCompleta) {
         for (int i = 0; i < listaCompleta.size(); i++) {
-            if (!(listaCompleta.get(i).equals(".code") || listaCompleta.get(i).equals(".data") || listaCompleta.get(i).equals(".endcode") || listaCompleta.get(i).equals(".enddata"))) {
+            if (!(listaCompleta.get(i).contains("."))) {
                 String[] linha = listaCompleta.get(i).split(" ");
                 for (int j = 0; j < linha.length; j++) {
                     if (!(linha[j].contains(":"))) {
+
                         listaFinal.add(new Memoria(linha[j], ""));
                     }
                 }
@@ -95,7 +96,7 @@ public class Listas {
         }
     }
 
-    public void adicionaMemoriaBinariaComandos() {
+    public void adicionaMemoriaBinaria() {
         String memoriaBinaria = "";
         String ultimoDigito = "";
         for (int i = 0; i < listaFinal.size(); i++) {
@@ -107,6 +108,7 @@ public class Listas {
                 }
                 memoriaBinaria = pegaMemoriaBinaria(listaFinal.get(i).getInstrucao()) + ultimoDigito;
                 listaFinal.get(i).setMemoria_binaria(memoriaBinaria);
+                continue;
             } else if (eVariavel(listaFinal.get(i).getInstrucao()) == true) {
                 for (int j = listaFinal.size() - 1; j < listaFinal.size(); j--) {
                     if (listaFinal.get(i).getInstrucao().equals(listaFinal.get(j).getInstrucao())) {
@@ -185,7 +187,15 @@ public class Listas {
                 for (int j = 1; j <= 2; j++) {
                     novaInstrucao += listaASM.get(listaDeLabels.get(listaFinal.get(i).getInstrucao())).split(" ")[j];
                 }
+                String instrucao = listaASM.get(listaDeLabels.get(listaFinal.get(i).getInstrucao())).split(" ")[1];
+                String memoriaBinaria = "";
+                for (int j = 0; j < listaFinal.size(); j++) {
+                    if (listaFinal.get(j).getInstrucao().equals(instrucao)) {
+                        memoriaBinaria = String.format("%08d", Integer.parseInt(listaFinal.get(j).getEndereco()));
+                    }
+                }
                 listaFinal.get(i).setInstrucao(listaFinal.get(i).getInstrucao() + "(" + novaInstrucao + ")");
+                listaFinal.get(i).setMemoria_binaria(memoriaBinaria);
             }
         }
     }
